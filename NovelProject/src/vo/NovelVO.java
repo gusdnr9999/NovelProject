@@ -19,4 +19,5 @@ public class NovelVO {
 	private int 	no;
 	private double	avgstar;
 	private String 	genre,title,poster,author,story,serial,iscp;
+	private ReviewVO rVo = new ReviewVO();
 }

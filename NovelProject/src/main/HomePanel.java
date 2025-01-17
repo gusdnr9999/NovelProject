@@ -6,6 +6,9 @@ import java.net.*;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+
 import common.*;
 import dao.*;
 import vo.*;
@@ -22,15 +25,19 @@ public class HomePanel extends JPanel implements MouseListener, ActionListener {
 	int curpage = 1;
 	int totalpage = 0;
 
+	JTable table;
+	DefaultTableModel model;
+	TableColumn column;
 	// 데이터베이스 연동 => FoodDAO
 	NovelDAO dao = NovelDAO.newInstance();
-
+	JLabel titleLa=new JLabel("최근 리뷰가 달린 소설",JLabel.CENTER);
 	public HomePanel(ControlPanel cp) {
 		// JPenal => FlowLayout - - -
-		setLayout(new BorderLayout());
+		setLayout(null);
 		this.cp = cp;
 		pan.setLayout(new GridLayout(3, 4, 5, 5));
-		add("Center", pan);
+		pan.setBounds(20, 15, 550, 500);
+		add(pan);
 
 		b1 = new JButton("이전");
 		b2 = new JButton("다음");
@@ -39,11 +46,49 @@ public class HomePanel extends JPanel implements MouseListener, ActionListener {
 		p.add(la);
 		p.add(b2);
 		// add => 코딩 순서로 배치
-		add("South", p);
-		print();
-
+		p.setBounds(20, 535, 550, 35);
+		add(p);
+		
+		String[] col={"","제목","평점"};
+    	Object[][] row=new Object[0][3];
+    	model=new DefaultTableModel(row,col)
+    	{
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			@Override
+			public Class<?> getColumnClass(int columnIndex) {
+				// TODO Auto-generated method stub
+				return getValueAt(0, columnIndex).getClass();
+			}
+    		
+    	};
+    	table=new JTable(model);
+    	table.getTableHeader().setReorderingAllowed(false);
+    	table.setRowHeight(35);
+    	JScrollPane js=new JScrollPane(table);
+    	for(int i=0;i<col.length;i++)
+    	{
+    		column=table.getColumnModel().getColumn(i);
+    		if(i==0)
+    			column.setPreferredWidth(100);
+    		else if(i==1)
+    			column.setPreferredWidth(150);
+    		else if(i==2)
+    			column.setPreferredWidth(80);
+    	}
+    	// 20, 595, 550, 35
+    	titleLa.setBounds(580, 15, 230, 45);
+    	titleLa.setFont(new Font("맑은 고딕",Font.BOLD,13));
+    	add(titleLa);
+    	js.setBounds(580,70, 230, 350);
+    	add(js);
+		
 		b1.addActionListener(this);// 이전
 		b2.addActionListener(this);// 다음
+		print();
 	}
 
 	// 초기화
@@ -74,6 +119,28 @@ public class HomePanel extends JPanel implements MouseListener, ActionListener {
 			}
 		}
 		la.setText(curpage + " page / " + totalpage + " pages");
+		
+
+    	for(int i=model.getRowCount()-1;i>=0;i--)
+    	{
+    		model.removeRow(i);
+    	}
+    	
+    	List<NovelVO> mList=dao.novelTrend();
+    	for(NovelVO vo:mList)
+    	{
+    		try
+    		{
+    			URL url=new URL(vo.getPoster());
+    			Image image=ImageChange.getImage(new ImageIcon(url), 35, 35);
+    			Object[] data= {
+    				new ImageIcon(image),
+    				vo.getTitle(),
+    				String.valueOf(vo.getRVo().getStar())
+    			};
+    			model.addRow(data);
+    		}catch(Exception ex) {}
+    	}
 	}
 
 	@Override
