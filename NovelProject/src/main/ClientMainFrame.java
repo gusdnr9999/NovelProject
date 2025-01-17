@@ -19,7 +19,7 @@ import javax.swing.*;
  *                   ----------- 쓰레드
  *
  */
-public class ClientMainFrame extends JFrame implements ActionListener, Runnable {
+public class ClientMainFrame extends JFrame implements ActionListener, Runnable, MouseListener {
 
 	/// 네트워크 통신
 	Socket s;
@@ -55,6 +55,21 @@ public class ClientMainFrame extends JFrame implements ActionListener, Runnable 
 		mf.b6.addActionListener(this);// 실시간 채팅
 		mf.b7.addActionListener(this);// 실시간 뉴스
 
+		// Chat => Socket
+		cp.cp.tf.addActionListener(this);
+		cp.cp.table.addMouseListener(this);
+
+		addWindowListener(new WindowAdapter() {
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				try {
+					out.write((Function.EXIT + "|\n").getBytes());
+				} catch (Exception ex) {
+				}
+			}
+
+		});
 	}
 
 	public static void main(String[] args) {
@@ -89,6 +104,23 @@ public class ClientMainFrame extends JFrame implements ActionListener, Runnable 
 					break;
 				case Function.WAITCHAT: {
 					cp.cp.ta.append(st.nextToken() + "\n");
+				}
+					break;
+				case Function.MYEXIT: {
+					dispose();
+					System.exit(0);
+				}
+					break;
+				// 남아 있는 사람 처리
+				case Function.EXIT: {
+					String yid = st.nextToken();
+					for (int i = 0; i < cp.cp.model.getRowCount(); i++) {
+						String id = cp.cp.model.getValueAt(i, 0).toString();
+						if (yid.equals(id)) {
+							cp.cp.model.removeRow(i);
+							break;
+						}
+					}
 				}
 					break;
 				}
@@ -132,6 +164,20 @@ public class ClientMainFrame extends JFrame implements ActionListener, Runnable 
 				// 서버연결
 				connection(vo);
 			}
+		} // chat처리
+		else if (e.getSource() == cp.cp.tf) {
+			String msg = cp.cp.tf.getText();
+			if (msg.trim().length() < 1) {
+				cp.cp.tf.requestFocus();
+				return;
+			}
+
+			try {
+				out.write((Function.WAITCHAT + "|" + msg + "\n").getBytes());
+			} catch (Exception ex) {
+			}
+
+			cp.cp.tf.setText("");
 		} else if (e.getSource() == mf.b6) {
 			cp.card.show(cp, "CHAT");
 		} else if (e.getSource() == mf.b1) {
@@ -167,5 +213,46 @@ public class ClientMainFrame extends JFrame implements ActionListener, Runnable 
 		}
 		// 서버로부터 값을 받아서 출력
 		new Thread(this).start(); // run()메소드 호출
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if (e.getSource() == cp.cp.table) {
+			int selectRow = cp.cp.table.getSelectedRow();
+			String myId = getTitle();
+			String id = cp.cp.model.getValueAt(selectRow, 0).toString();
+			if (myId.equals(id)) {
+				cp.cp.b1.setEnabled(false);
+				cp.cp.b2.setEnabled(false);
+			} else {
+				cp.cp.b1.setEnabled(true);
+				cp.cp.b2.setEnabled(true);
+			}
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 }
