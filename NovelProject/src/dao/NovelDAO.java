@@ -162,4 +162,62 @@ public class NovelDAO {
 			}
 			return list;
 		}
+
+		public List<NovelVO> novelFindData(int page, String title) {
+			List<NovelVO> list = new ArrayList<NovelVO>();
+			try {
+				conn = db.getConnection();
+				String sql = "SELECT no,poster,title,genre,author,avgstar,num "
+						+ "FROM (SELECT no,poster,title,genre,author,avgstar,rownum as num "
+						+ "FROM (SELECT /*+ INDEX_ASC(novel novel_no_pk) */ no,poster,title,genre,author,avgstar "
+						+ "FROM novel "
+						+ "WHERE TITLE LIKE '%'||?||'%')) "
+						+ "WHERE num BETWEEN ? AND ?";
+				ps = conn.prepareStatement(sql);
+				int start = (NOVELROW * page) - (NOVELROW - 1);
+				int end = (NOVELROW * page);
+				ps.setString(1, title);
+				ps.setInt(2, start);
+				ps.setInt(3, end);
+				ResultSet rs = ps.executeQuery();
+				while(rs.next()) {
+					NovelVO vo = new NovelVO();
+					vo.setNo(rs.getInt(1));
+					vo.setPoster(rs.getString(2));
+					vo.setTitle(rs.getString(3));
+					vo.setGenre(rs.getString(4));
+					vo.setAuthor(rs.getString(5));
+					vo.setAvgstar(rs.getDouble(6));
+				}
+				rs.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				db.disConnection(conn, ps);
+			}
+			return list;
+		}
+
+		public int novelFindTotalPage(String title) {
+			int count = 0;
+			try {
+				conn = db.getConnection();
+				String sql = "SELECT COUNT(no) "
+						+ "FROM (SELECT no,title,poster,rownum as num "
+						+ "FROM (SELECT /*+ INDEX_ASC(novel novel_no_pk) */ no,title,poster "
+						+ "FROM novel "
+						+ "WHERE TITLE LIKE '%'||?||'%'))";
+				ps = conn.prepareStatement(sql);
+				ps.setString(1, title);
+				ResultSet rs = ps.executeQuery();
+				rs.next();
+				count = rs.getInt(1);
+				rs.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				db.disConnection(conn, ps);
+			}
+			return 0;
+		}
 }
