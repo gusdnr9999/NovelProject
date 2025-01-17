@@ -135,7 +135,6 @@ public class ClientMainFrame extends JFrame implements ActionListener, Runnable,
 	// 서버에 요청 => 로그인 / 채팅 보내기
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("뭐지왜"+selectRow);
 		if (e.getSource() == login.b2) {
 			dispose();// 윈도우 메모리 해제
 			System.exit(0); // 프로그램 종료
@@ -221,7 +220,7 @@ public class ClientMainFrame extends JFrame implements ActionListener, Runnable,
 
 	public void connection(MemberVO vo) {
 		try {
-			s = new Socket("localhost", 4321);
+			s = new Socket("192.168.0.118", 4321);
 			// 서버 연결 => s는 서버
 			// 서버로 전송
 			out = s.getOutputStream();

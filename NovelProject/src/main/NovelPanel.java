@@ -30,7 +30,7 @@ public class NovelPanel extends JPanel implements ActionListener{
 		
 		JPanel p1 = new JPanel();
 		p1.setLayout(new GridLayout(2,7,5,5));
-		String[] temp = {"전체", "로맨스", "로판", "판타지", "현판", "무협", "미스터리", "대체역사", "라이트노벨", "게임", "스포츠", "SF", "BL"};
+		String[] temp = {"전체", "로맨스", "로맨스판타지", "판타지", "현대판타지", "무협", "미스터리", "대체역사", "라이트노벨", "게임", "스포츠", "SF", "BL"};
 		for(int i = 0 ; i < genre.length; i++) {
 			genre[i] = new JButton(temp[i]);
 			p1.add(genre[i]);
@@ -83,7 +83,31 @@ public class NovelPanel extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+		for(int i = 0; i < genre.length; i++) {
+			if(e.getSource() == genre[i]) {
+				strGenre=genre[i].getText();
+				//버튼 문자열 읽기
+				//현재페이지 => 1
+				curpage = 1;
+				init();
+				print();
+			}
+		}
+		//이전
+		if(e.getSource() == prev) {
+			if(curpage > 1) {
+				curpage--;
+				init();
+				print();
+			}
+		}else if(e.getSource() == next) {
+			if(curpage < totalpage) {
+				curpage++;
+				init();
+				print();
+			}
+			
+		}
 	}
 
 }

@@ -107,12 +107,10 @@ public class NovelDAO {
 		}
 		try {
 			conn = db.getConnection();
-			String sql = "SELECT COUNT(*) "
+			String sql = "SELECT CEIL(COUNT(*)/12.0) "
 					+ "FROM novel "
-					+ "WHERE genre LIKE '%'||?||'%'";
-			if(genre.equals("판타지")) {
-				sql += " AND genre NOT LIKE '%'||현대판타지||'%'";
-			}
+					+ "WHERE ' '|| genre ||' ' LIKE '%'||' '||?||' '||'%'";
+			System.out.println(sql);
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, genre);				
 			ResultSet rs = ps.executeQuery();
@@ -134,20 +132,19 @@ public class NovelDAO {
 				String sql = "SELECT no,title,poster,num "
 						+ "FROM (SELECT no,title,poster,rownum as num "
 						+ "FROM (SELECT /*+ INDEX_ASC(novel novel_no_pk) */ no,title,poster "
-						+ "FROM novel";
+						+ "FROM novel ";
 				if(genre.equals("전체")) {
-					
-				}else if(genre.equals("판타지")) {
-					sql += "WHERE genre LIKE '%'||?||'%' AND genre NOT LIKE '%'||현대판타지||'%'";
-				}else {
-					sql += "WHERE genre LIKE '%'||?||'%'";
+					sql += "WHERE '전체' = ?";
+				}else{
+					sql += "WHERE ' '|| genre ||' ' LIKE '%'||' '||?||' '||'%'";
 				}
 				sql += ")) WHERE num BETWEEN ? AND ?";
 				ps = conn.prepareStatement(sql);
 				int start = (NOVELROW * page) - (NOVELROW - 1);
 				int end = (NOVELROW * page);
-				ps.setInt(1, start);
-				ps.setInt(2, end);
+				ps.setString(1, genre);
+				ps.setInt(2, start);
+				ps.setInt(3, end);
 				ResultSet rs = ps.executeQuery();
 				while (rs.next()) {
 					NovelVO vo = new NovelVO();
