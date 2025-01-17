@@ -31,6 +31,7 @@ public class ClientMainFrame extends JFrame implements ActionListener, Runnable,
 	Login login = new Login();
 	// 배치
 	// 데이터베이스
+	int selectRow=-1; // 테이블에서 선택이 안된 상태
 	MemberDAO mDao = MemberDAO.newInstance();
 
 	public ClientMainFrame() {
@@ -58,7 +59,9 @@ public class ClientMainFrame extends JFrame implements ActionListener, Runnable,
 		// Chat => Socket
 		cp.cp.tf.addActionListener(this);
 		cp.cp.table.addMouseListener(this);
-
+		cp.cp.b2.addActionListener(this); // 채팅창 정보보기
+		cp.cp.b1.addActionListener(this); // 쪽지보내기
+		
 		addWindowListener(new WindowAdapter() {
 
 			@Override
@@ -132,6 +135,7 @@ public class ClientMainFrame extends JFrame implements ActionListener, Runnable,
 	// 서버에 요청 => 로그인 / 채팅 보내기
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		System.out.println("뭐지왜"+selectRow);
 		if (e.getSource() == login.b2) {
 			dispose();// 윈도우 메모리 해제
 			System.exit(0); // 프로그램 종료
@@ -164,7 +168,27 @@ public class ClientMainFrame extends JFrame implements ActionListener, Runnable,
 				// 서버연결
 				connection(vo);
 			}
-		} // chat처리
+		}else if(e.getSource()==cp.cp.b2) { // 정보보기임
+			if(selectRow==-1) { // 선택이 안된 상태
+				JOptionPane.showMessageDialog(this, "정보를 확인할 대상을 선택하세요");
+				return;
+				
+			}
+			String id =cp.cp.model.getValueAt(selectRow, 0).toString(); // id읽어오는거
+			
+			MemberVO vo =mDao.memberInfo(id);
+			
+			
+ 		  //SELECT nickname,gender,email,address1,phone,birth" 
+			String info="이름 : "+vo.getNickname()+"\n"
+					+ "성별 : "+vo.getGender()+"\n"
+					+ "이메일 : "+vo.getEmail()+"\n"
+					+ "주소 : "+vo.getAddress1()+"\n"
+					+ "핸드폰 : "+vo.getPhone()+"\n"
+					+ "생일 : "+vo.getBirth().toString();
+			JOptionPane.showMessageDialog(this, info);
+		} 
+		// chat처리
 		else if (e.getSource() == cp.cp.tf) {
 			String msg = cp.cp.tf.getText();
 			if (msg.trim().length() < 1) {
@@ -219,7 +243,7 @@ public class ClientMainFrame extends JFrame implements ActionListener, Runnable,
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		if (e.getSource() == cp.cp.table) {
-			int selectRow = cp.cp.table.getSelectedRow();
+			selectRow = cp.cp.table.getSelectedRow();
 			String myId = getTitle();
 			String id = cp.cp.model.getValueAt(selectRow, 0).toString();
 			if (myId.equals(id)) {
