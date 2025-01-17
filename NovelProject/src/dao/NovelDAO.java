@@ -37,14 +37,8 @@ public class NovelDAO {
 			while (rs.next()) {
 				NovelVO vo = new NovelVO();
 				vo.setNo(rs.getInt(1));
-				vo.setGenre(rs.getString(2));
-				vo.setTitle(rs.getString(3));
-				vo.setPoster(rs.getString(4));
-				vo.setAuthor(rs.getString(5));
-				vo.setStory(rs.getString(6));
-				vo.setAvgstar(rs.getDouble(7));
-				vo.setSerial(rs.getString(8));
-				vo.setIscp(rs.getString(9));
+				vo.setTitle(rs.getString(2));
+				vo.setPoster(rs.getString(3));
 				list.add(vo);
 				
 			}
@@ -158,14 +152,8 @@ public class NovelDAO {
 				while (rs.next()) {
 					NovelVO vo = new NovelVO();
 					vo.setNo(rs.getInt(1));
-					vo.setGenre(rs.getString(2));
-					vo.setTitle(rs.getString(3));
-					vo.setPoster(rs.getString(4));
-					vo.setAuthor(rs.getString(5));
-					vo.setStory(rs.getString(6));
-					vo.setAvgstar(rs.getDouble(7));
-					vo.setSerial(rs.getString(8));
-					vo.setIscp(rs.getString(9));
+					vo.setTitle(rs.getString(2));
+					vo.setPoster(rs.getString(3));
 					list.add(vo);
 
 				}
