@@ -24,7 +24,7 @@ public class MemberDAO {
 	if (dao == null) {
 	  dao = new MemberDAO();
 	}
-	return dao;
+	return dao; 
   }
 
   public void getConnection() {
