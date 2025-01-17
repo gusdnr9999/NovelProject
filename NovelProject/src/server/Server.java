@@ -124,7 +124,16 @@ public class Server implements Runnable {
 			try {
 				while (true) {
 					// 사용자 전송한 메세지를 받는다
-					String msg = in.readLine();
+					String msg = null;
+					try {
+						msg = in.readLine();
+					} catch (IOException e) {
+						// IOException 발생 시 클라이언트가 연결 종료됨 => 종료
+						break;
+					}
+					if (msg == null) {
+						break; // 스트림이 닫히면 null을 반환
+					}
 					System.out.println("Client=>" + msg);
 					// 100|hong|홍길동|남자
 					StringTokenizer st = new StringTokenizer(msg, "|");
