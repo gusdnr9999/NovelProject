@@ -21,20 +21,23 @@ public class ReviewDAO {
 	}
 
 	// 전체목록 출력
-	public List<ReviewVO> reviewListData(int page) {
+	public List<ReviewVO> reviewListData(int page, int no) {
 		List<ReviewVO> list = new ArrayList<ReviewVO>();
 		try {
-
 			conn = db.getConnection();
-			String sql = "SELECT rno,no,id,star,content,regdate,up,down,profile,num "
-					+ "FROM (SELECT rno,no,id,star,content,regdate,up,down,profile,rownum as num"
-					+ "FROM (SELECT /*+ INDEX_ASC(review review_rno_pk) */ rno,no,id,star,content,regdate,up,down,profile"
-					+ "FROM review))" + "WHERE num BETWEEN ? AND ?";
+			String sql = "SELECT rno,no,id,star,content,regdate,up,down,profile,nickname,num "
+					+ "FROM (SELECT rno,no,id,star,content,regdate,up,down,profile,nickname,rownum as num "
+					+ "FROM (SELECT rno,no,review.id,star,content,regdate,up,down,profile,nickname "
+					+ "FROM review, member "
+					+ "WHERE review.id = member.id AND no = ? "
+					+ "ORDER BY up DESC)) "
+					+ "WHERE num BETWEEN ? AND ?";
 			ps = conn.prepareStatement(sql);
 			int start = (REVIEWROW * page) - (REVIEWROW - 1);
 			int end = (REVIEWROW * page);
-			ps.setInt(1, start);
-			ps.setInt(2, end);
+			ps.setInt(1, no);
+			ps.setInt(2, start);
+			ps.setInt(3, end);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				ReviewVO vo = new ReviewVO();
@@ -47,6 +50,7 @@ public class ReviewDAO {
 				vo.setUp(rs.getInt(7));
 				vo.setDown(rs.getInt(8));
 				vo.setProfile(rs.getString(9));
+				vo.setNickname(rs.getString(10));
 				list.add(vo);
 			}
 			rs.close();

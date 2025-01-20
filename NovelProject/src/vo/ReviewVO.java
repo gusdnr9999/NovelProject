@@ -17,6 +17,6 @@ import lombok.Data;
 public class ReviewVO {
 	private int 	rno,no,up,down;
 	private double 	star;
-	private String 	id,content,profile;
+	private String 	id,content,profile, nickname;
 	private Date	regdate; 
 }
