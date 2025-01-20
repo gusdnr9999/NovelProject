@@ -10,9 +10,9 @@ public class ControlPanel extends JPanel {
   ChatPanel cp;
   NovelPanel np;
   NovelFindPanel nfp;
-  BoardPanel bp;
   NewsPanel nep;
   FollowPanel fp;
+  BoardMainPanel bmp;
   CardLayout card = new CardLayout();
 
   public ControlPanel() {
@@ -25,8 +25,10 @@ public class ControlPanel extends JPanel {
 	add("NOVEL", np);
 	nfp = new NovelFindPanel(this);
 	add("FIND", nfp);
-	bp = new BoardPanel(this);
-	add("BOARD", bp);
+	
+	bmp = new BoardMainPanel(this);
+	add("BOARD", bmp);
+
 	nep = new NewsPanel(this);
 	add("NEWS", nep);
 	fp = new FollowPanel(this);

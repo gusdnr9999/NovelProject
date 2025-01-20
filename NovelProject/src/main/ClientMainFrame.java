@@ -215,7 +215,7 @@ public class ClientMainFrame extends JFrame implements ActionListener, Runnable,
 		new Thread(this).start(); // run()메소드 호출
 	}
 
-	@Override
+	@Override 
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		if (e.getSource() == cp.cp.table) {
