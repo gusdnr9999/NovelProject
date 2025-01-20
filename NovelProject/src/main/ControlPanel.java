@@ -6,13 +6,14 @@ import javax.swing.*;
 // 화면 변경
 public class ControlPanel extends JPanel {
 
-  HomePanel hp;
-  ChatPanel cp;
-  NovelPanel np;
-  NovelFindPanel nfp;
-  BoardPanel bp;
-  NewsPanel nep;
-  FollowPanel fp;
+  HomePanel hp; // 메인홈
+  ChatPanel cp; // 실시간 채팅
+  NovelPanel np; // 소설장르
+  NovelFindPanel nfp; // 소설검색
+  BoardPanel bp; // 게시판
+  NewsPanel nep; // 뉴스
+  FollowPanel fp; // 즐겨찾기
+  NovelDetailPanel ndp;
   CardLayout card = new CardLayout();
 
   public ControlPanel() {
@@ -31,6 +32,8 @@ public class ControlPanel extends JPanel {
 	add("NEWS", nep);
 	fp = new FollowPanel(this);
 	add("FOLLOW", fp);
+	ndp = new NovelDetailPanel(this);
+	add("DETAIL", ndp);
   }
 
 }

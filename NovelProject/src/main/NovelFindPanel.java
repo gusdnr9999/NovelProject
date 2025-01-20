@@ -109,8 +109,9 @@ public class NovelFindPanel extends JPanel implements ActionListener, MouseListe
 	prev.addActionListener(this);
 	next.addActionListener(this);
 	
+	print();
     }
-    public void print(String title)
+    public void print()
 	{
 		// 테이블 데이터 지우기 
 		for(int i=model.getRowCount()-1;i>=0;i--)
@@ -129,10 +130,15 @@ public class NovelFindPanel extends JPanel implements ActionListener, MouseListe
 			URL url=new URL(vo.getPoster());
 			Image image=ImageChange.getImage(
 					new ImageIcon(url), 30, 30);
+			String text1 = vo.getTitle();
+			String text2 = vo.getTitle();
+			String strprev = text1.substring(0, text1.indexOf(title));
+			String strnext = text2.substring(text2.indexOf(title)+title.length());
+			String strTitle = "<html><body>" + strprev + "<b>" + this.title + "</b>" + strnext + "</body></html>";
 			Object[] data={
 				vo.getNo(),
 				new ImageIcon(image),
-				vo.getTitle(),
+				strTitle,
 				vo.getGenre(),
 				vo.getAuthor(),
 				String.valueOf(vo.getAvgstar()).equals("0.0") ? "평가 없음" : String.valueOf(vo.getAvgstar())
@@ -154,16 +160,16 @@ public class NovelFindPanel extends JPanel implements ActionListener, MouseListe
 				tf.requestFocus();
 				return;
 			}
-			print(title);
+			print();
 		}else if(e.getSource() == prev) {
 			if(curpage > 1) {
 				curpage--;
-				print(title);
+				print();
 			}
 		}else if(e.getSource() == next) {
 			if(curpage < totalpage) {
 				curpage++;
-				print(title);
+				print();
 			}
 			
 		}

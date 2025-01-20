@@ -19,7 +19,7 @@ public class NovelDAO {
 		return nDao;
 	}
 
-	// 전체목록 출력
+	//홈 => 전체목록 출력
 	public List<NovelVO> novelListData(int page) {
 		List<NovelVO> list = new ArrayList<NovelVO>();
 		try {
@@ -52,7 +52,7 @@ public class NovelDAO {
 		return list;
 	}
 	
-
+	// 홈 => 전체페이지
 	public int novelTotalPage() {
 		int count = 0;
 		try {
@@ -162,7 +162,7 @@ public class NovelDAO {
 			}
 			return list;
 		}
-
+		// 소설 검색 리스트
 		public List<NovelVO> novelFindData(int page, String title) {
 			List<NovelVO> list = new ArrayList<NovelVO>();
 			try {
@@ -198,7 +198,7 @@ public class NovelDAO {
 			}
 			return list;
 		}
-
+		// 소설 검색 리스트총 페이지수
 		public int novelFindTotalPage(String title) {
 			int count = 1;
 			try {
@@ -220,5 +220,32 @@ public class NovelDAO {
 				db.disConnection(conn, ps);
 			}
 			return count;
+		}
+		public NovelVO novelDetailData(int no) {
+			NovelVO vo = new NovelVO();
+			try {
+				conn = db.getConnection();
+				String sql = "select no, genre, title, poster, author, story, avgstar, serial, iscp "
+						+ "from novel "
+						+ "where no = " + no;
+				ps = conn.prepareStatement(sql);
+				ResultSet rs = ps.executeQuery();
+				rs.next();
+				vo.setNo(rs.getInt(1));
+				vo.setGenre(rs.getString(2));
+				vo.setTitle(rs.getString(3));
+				vo.setPoster(rs.getString(4));
+				vo.setAuthor(rs.getString(5));
+				vo.setStory(rs.getString(6));
+				vo.setAvgstar(Double.parseDouble(rs.getString(7)));
+				vo.setSerial(rs.getString(8));
+				vo.setIscp(rs.getString(9));
+				rs.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				db.disConnection(conn, ps);
+			}
+			return vo;
 		}
 }
