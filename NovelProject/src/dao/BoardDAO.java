@@ -8,7 +8,7 @@ public class BoardDAO {
    // 오라클 송수신 담당 (송신(SQL문장)/수신(실행 결과값))
    private PreparedStatement ps;
    // 오라클 주소 => 고정 (상수) 
-   private final String URL="jdbc:oracle:thin:@localhost:1521:XE";
+   private final String URL="jdbc:oracle:thin:@211.238.142.124:1521:XE";
    // 객체를 한번만 생성해서 재사용 (메모리 절약) 
    // Connection객체수를 조절 => 50명 
    // 싱글턴 

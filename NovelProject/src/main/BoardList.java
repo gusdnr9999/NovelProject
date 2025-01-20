@@ -4,11 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.List;
 
 import javax.swing.*;
 import javax.swing.table.*;
 
 import dao.BoardDAO;
+import vo.BoardVO;
 public class BoardList extends JPanel
 implements ActionListener,MouseListener
 {
@@ -103,10 +105,50 @@ implements ActionListener,MouseListener
     	table.addMouseListener(this);
 
     }
-    public void print()
-    {
-    	
-    }
+    public void print() {
+    for(int i=model.getRowCount()-1;i>=0;i--)
+   	{
+   		model.removeRow(i);
+   	}
+   	// 데이터 받기 
+   	List<BoardVO> list=dao.boardListData(curpage);
+   	totalpage=dao.boardTotalPage();
+   	
+   	// 출력 => 테이블 
+   	for(BoardVO vo:list)
+   	{
+   		if(vo.getGroup_tab()>0) // 답변인 경우
+   		{
+   			String s="";
+   			for(int i=0;i<vo.getGroup_tab();i++)
+   			{
+   				s+="&nbsp;&nbsp;";
+   				// &nbsp; => " "
+   			}
+   			String subject="<html><body>"+s+"<font color=red>☞</font>"+vo.getSubject()+"</body></html>";
+   			String[] data= {
+   				String.valueOf(vo.getNo()),
+   				subject,
+   				vo.getName(),
+   				vo.getDbday(),
+   				String.valueOf(vo.getHit())
+   			};
+   			model.addRow(data);
+   		}
+   		else // 답변이 아닌 경우 => 새글 
+   		{
+   			String[] data= {
+       				String.valueOf(vo.getNo()),
+       				vo.getSubject(),
+       				vo.getName(),
+       				vo.getDbday(),
+       				String.valueOf(vo.getHit())
+       			};
+   			model.addRow(data);
+   		}
+   	}
+   	pageLa.setText(curpage+" page / "+totalpage+" pages");
+   }
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
