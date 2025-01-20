@@ -83,29 +83,32 @@ public class NovelFindPanel extends JPanel implements ActionListener, MouseListe
     			column.setPreferredWidth(80);
     	 }
    	 
-   	 b=new JButton("검색");
-   	 tf=new JTextField();
+   	b=new JButton("검색");
+   	tf=new JTextField();
    	 
-   	 setLayout(null);
+   	setLayout(null);
    	 
-   	 tf.setBounds(20, 20, 200, 30);
-   	 b.setBounds(225, 20, 80, 30);
+   	tf.setBounds(20, 20, 200, 30);
+   	b.setBounds(225, 20, 80, 30);
    	 
-   	 js1.setBounds(20, 60, 780, 500);
+   	js1.setBounds(20, 60, 780, 450);
    	 
-   	 add(tf); add(b); 
-   	 add(js1);
+   	add(tf); add(b); 
+   	add(js1);
    	 
    	JPanel p2 = new JPanel();
-   	la.setText(curpage + " page / " + totalpage + " pages");
+   	
 	p2.add(prev); p2.add(la); p2.add(next);
-   	 b.addActionListener(this);
-   	 tf.addActionListener(this);
-   	 
-   	 table.addMouseListener(this);
-   	 
+	p2.setBounds(175, 520, 500, 60);
+	add(p2);
+	b.addActionListener(this);
+	tf.addActionListener(this);
+	 
+	table.addMouseListener(this);
+	 
 	prev.addActionListener(this);
 	next.addActionListener(this);
+	
     }
     public void print(String title)
 	{
@@ -132,13 +135,12 @@ public class NovelFindPanel extends JPanel implements ActionListener, MouseListe
 				vo.getTitle(),
 				vo.getGenre(),
 				vo.getAuthor(),
-				vo.getAvgstar()
+				String.valueOf(vo.getAvgstar()).equals("0.0") ? "평가 없음" : String.valueOf(vo.getAvgstar())
 			};
-			System.out.println(vo.getNo());
-			System.out.println(vo.getTitle());
 			model.addRow(data);
 		  }catch(Exception ex){}
 		}
+		la.setText(curpage + " page / " + totalpage + " pages");
 	}
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -146,7 +148,7 @@ public class NovelFindPanel extends JPanel implements ActionListener, MouseListe
     	if(e.getSource()==b || e.getSource()==tf)
 		{
 			// 검색어 읽기
-			String title=tf.getText();
+			title=tf.getText();
 			if(title.trim().length()<1)
 			{
 				tf.requestFocus();

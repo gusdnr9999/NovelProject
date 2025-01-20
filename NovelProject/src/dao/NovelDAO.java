@@ -11,6 +11,7 @@ public class NovelDAO {
 	DataBase db = new DataBase();
 	private static NovelDAO nDao;
 	private final int NOVELROW = 12;
+	private final int NOVELFINDROW = 20;
 
 	public static NovelDAO newInstance() {
 		if (nDao == null)
@@ -110,7 +111,6 @@ public class NovelDAO {
 			String sql = "SELECT CEIL(COUNT(*)/12.0) "
 					+ "FROM novel "
 					+ "WHERE ' '|| genre ||' ' LIKE '%'||' '||?||' '||'%'";
-			System.out.println(sql);
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, genre);				
 			ResultSet rs = ps.executeQuery();
@@ -174,8 +174,8 @@ public class NovelDAO {
 						+ "WHERE TITLE LIKE '%'||?||'%')) "
 						+ "WHERE num BETWEEN ? AND ?";
 				ps = conn.prepareStatement(sql);
-				int start = (NOVELROW * page) - (NOVELROW - 1);
-				int end = (NOVELROW * page);
+				int start = (NOVELFINDROW * page) - (NOVELFINDROW - 1);
+				int end = (NOVELFINDROW * page);
 				ps.setString(1, title);
 				ps.setInt(2, start);
 				ps.setInt(3, end);
@@ -188,6 +188,7 @@ public class NovelDAO {
 					vo.setGenre(rs.getString(4));
 					vo.setAuthor(rs.getString(5));
 					vo.setAvgstar(rs.getDouble(6));
+					list.add(vo);
 				}
 				rs.close();
 			} catch (Exception e) {
@@ -199,10 +200,10 @@ public class NovelDAO {
 		}
 
 		public int novelFindTotalPage(String title) {
-			int count = 0;
+			int count = 1;
 			try {
 				conn = db.getConnection();
-				String sql = "SELECT COUNT(no) "
+				String sql = "SELECT CEIL(COUNT(no)/10.0) "
 						+ "FROM (SELECT no,title,poster,rownum as num "
 						+ "FROM (SELECT /*+ INDEX_ASC(novel novel_no_pk) */ no,title,poster "
 						+ "FROM novel "
@@ -218,6 +219,6 @@ public class NovelDAO {
 			} finally {
 				db.disConnection(conn, ps);
 			}
-			return 0;
+			return count;
 		}
 }
