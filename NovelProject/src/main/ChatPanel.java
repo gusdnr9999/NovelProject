@@ -36,6 +36,7 @@ public class ChatPanel extends JPanel {
 
 		};
 		table = new JTable(model);
+		table.getTableHeader().setReorderingAllowed(false);// 목록 안움직이게 고정하는거
 		JScrollPane js1 = new JScrollPane(table);
 
 		// 배치

@@ -134,7 +134,6 @@ public class Server implements Runnable {
 					if (msg == null) {
 						break; // 스트림이 닫히면 null을 반환
 					}
-					System.out.println("Client=>" + msg);
 					// 100|hong|홍길동|남자
 					StringTokenizer st = new StringTokenizer(msg, "|");
 					int protocol = Integer.parseInt(st.nextToken());

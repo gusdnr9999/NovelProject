@@ -1,6 +1,8 @@
 package dao;
 
 import java.sql.*;
+import java.util.Date;
+
 import vo.MemberVO;
 
 public class MemberDAO {
@@ -9,7 +11,7 @@ public class MemberDAO {
   private PreparedStatement ps;
   private static MemberDAO dao;
   private final String URL = "jdbc:oracle:thin:@211.238.142.124:1521:XE";
-
+  static String id = "";
   private MemberDAO() {
 	try {
 	  Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -22,7 +24,7 @@ public class MemberDAO {
 	if (dao == null) {
 	  dao = new MemberDAO();
 	}
-	return new MemberDAO();
+	return dao; 
   }
 
   public void getConnection() {
@@ -48,6 +50,7 @@ public class MemberDAO {
 
   public MemberVO isLogin(String id, String pwd) {
 	MemberVO vo = new MemberVO();
+	this.id = id;
 	try {
 	  getConnection();
 	  String sql = "SELECT COUNT(*) "
@@ -91,4 +94,35 @@ public class MemberDAO {
 	}
 	return vo;
   }
+  /*
+      우리꺼 member
+        private String id, nickname, pw, name, gender, email, address1, address2, phone, is_admin, last_login, msg;
+  		private Date reg_date, birth;
+   */
+  	public MemberVO memberInfo(String id) {
+  		MemberVO vo =new MemberVO();
+  		try {
+  			getConnection();
+  		//	String sql="SELECT nickname FROM member WHERE id=?"; 
+  			String sql = "SELECT nickname,gender,email,address1,phone,birth " 
+  						+ "FROM member " 
+  						+ "WHERE id=?";
+  			ps=conn.prepareStatement(sql);
+  			ps.setString(1, id);
+  			ResultSet rs= ps.executeQuery();
+  			rs.next();
+  			vo.setNickname(rs.getString(1));
+  			vo.setGender(rs.getString(2));
+  			vo.setEmail(rs.getString(3));
+  			vo.setAddress1(rs.getString(4));
+  			vo.setPhone(rs.getString(5));
+  			vo.setBirth(rs.getDate(6));
+  			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			disConnection(conn, ps);
+		}
+  		return vo;
+  	}
 }
