@@ -177,7 +177,15 @@ public class NovelFindPanel extends JPanel implements ActionListener, MouseListe
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+		if(e.getSource() == table) {
+			if(e.getClickCount() == 2) {
+				int row = table.getSelectedRowCount();
+				String no = model.getValueAt(row, 0).toString();
+				NovelVO vo = dao.novelDetailData(Integer.parseInt(no));
+				cp.ndp.detailPrint(3, vo);
+				cp.card.show(cp, "DETAIL");
+			}
+		}
 	}
 	@Override
 	public void mousePressed(MouseEvent e) {

@@ -9,7 +9,7 @@ import javax.swing.border.*;
 import common.*;
 import dao.*;
 import vo.*;
-public class NovelPanel extends JPanel implements ActionListener{
+public class NovelPanel extends JPanel implements ActionListener, MouseListener{
 	ControlPanel cp;
 	JButton[] genre = new JButton[13]; // 한식, 중식, 양식, 일식, 기타
 	JButton prev,next; //이전, 다음
@@ -75,7 +75,7 @@ public class NovelPanel extends JPanel implements ActionListener{
 					imgs[i].setToolTipText(vo.getTitle() + "^" + vo.getNo());
 					pan.add(imgs[i]);
 					// 이벤트 등록
-//					imgs[i].addMouseListener(this);
+					imgs[i].addMouseListener(this);
 				} catch (Exception e) {}
 			}
 			la.setText(curpage + " page / " + totalpage + " pages");
@@ -107,6 +107,49 @@ public class NovelPanel extends JPanel implements ActionListener{
 				print();
 			}
 			
+		}
+	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		for(int i = 0; i < imgs.length; i++) {
+			if(e.getSource() == imgs[i]) {
+				if(e.getClickCount() == 2) {
+					String no = imgs[i].getToolTipText();
+					no = no.substring(no.lastIndexOf("^")+1);
+					NovelVO vo = dao.novelDetailData(Integer.parseInt(no));
+					cp.ndp.detailPrint(2, vo);
+					cp.card.show(cp, "DETAIL");
+				}
+			}
+		}
+	}
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		for (int i = 0; i < imgs.length; i++) {
+			if (e.getSource() == imgs[i]) {
+				imgs[i].setBorder(new LineBorder(Color.red, 3));
+			}
+		}
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		for (int i = 0; i < imgs.length; i++) {
+			if (e.getSource() == imgs[i]) {
+				imgs[i].setBorder(null);
+			}
 		}
 	}
 

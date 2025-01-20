@@ -11,7 +11,7 @@ public class MemberDAO {
   private PreparedStatement ps;
   private static MemberDAO dao;
   private final String URL = "jdbc:oracle:thin:@211.238.142.124:1521:XE";
-
+  static String id = "";
   private MemberDAO() {
 	try {
 	  Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -50,6 +50,7 @@ public class MemberDAO {
 
   public MemberVO isLogin(String id, String pwd) {
 	MemberVO vo = new MemberVO();
+	this.id = id;
 	try {
 	  getConnection();
 	  String sql = "SELECT COUNT(*) "
@@ -118,7 +119,6 @@ public class MemberDAO {
   			vo.setBirth(rs.getDate(6));
   			rs.close();
 		} catch (Exception e) {
-			System.out.println("이게에러인가");
 			e.printStackTrace();
 		}finally {
 			disConnection(conn, ps);

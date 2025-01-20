@@ -225,9 +225,9 @@ public class NovelDAO {
 			NovelVO vo = new NovelVO();
 			try {
 				conn = db.getConnection();
-				String sql = "select no, genre, title, poster, author, story, avgstar, serial, iscp "
-						+ "from novel "
-						+ "where no = " + no;
+				String sql = "SELECT no, genre, title, poster, author, story, avgstar, serial, iscp "
+						+ "FROM novel "
+						+ "WHERE no = "+ no;
 				ps = conn.prepareStatement(sql);
 				ResultSet rs = ps.executeQuery();
 				rs.next();

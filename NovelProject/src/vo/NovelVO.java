@@ -16,7 +16,7 @@ ISCP             CHAR(1)
  */
 @Data
 public class NovelVO {
-	private int 	no;
+	private int 	no, isfol;
 	private double	avgstar;
 	private String 	genre,title,poster,author,story,serial,iscp;
 	private ReviewVO rVo = new ReviewVO();
