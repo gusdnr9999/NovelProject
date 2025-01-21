@@ -107,11 +107,11 @@ implements ActionListener
 			
 			dao.boardInsert(vo); // 오라클 추가
 			// 화면이동
-//			cp.bList.curpage=1; // 화면이 종료가 된것이 아니다
-//			// 이전값을 유지
-//			
-//			cp.card.show(cp, "BLIST");
-//			cp.bList.print();
+			cp.bl.curpage=1; // 화면이 종료가 된것이 아니다
+			// 이전값을 유지
+			
+			cp.card.show(cp, "BOARD");
+			cp.bl.print();
 		}
 	}
 }

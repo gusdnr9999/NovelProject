@@ -225,10 +225,14 @@ public class NovelDAO {
 			NovelVO vo = new NovelVO();
 			try {
 				conn = db.getConnection();
-				String sql = "SELECT no, genre, title, poster, author, story, avgstar, serial, iscp "
+				String sql = "SELECT no, genre, title, poster, author, story, avgstar, serial, iscp,"
+						+ "NVL((SELECT rno FROM review WHERE no = ? AND id = ?), 0) as rno "
 						+ "FROM novel "
-						+ "WHERE no = "+ no;
+						+ "WHERE no = ?";
 				ps = conn.prepareStatement(sql);
+				ps.setInt(1, no);
+				ps.setString(2, MemberDAO.id);
+				ps.setInt(3, no);
 				ResultSet rs = ps.executeQuery();
 				rs.next();
 				vo.setNo(rs.getInt(1));
@@ -240,7 +244,26 @@ public class NovelDAO {
 				vo.setAvgstar(Double.parseDouble(rs.getString(7)));
 				vo.setSerial(rs.getString(8));
 				vo.setIscp(rs.getString(9));
+				int rno = rs.getInt(10);
 				rs.close();
+				if(rno != 0) {
+					sql = "SELECT rno, id, no, content, star, up, down, regdate "
+							+ "FROM review "
+							+ "WHERE rno = ?";
+					ps = conn.prepareStatement(sql);
+					ps.setInt(1, rno);
+					rs = ps.executeQuery();
+					rs.next();
+					vo.getRVo().setRno(rs.getInt(1));
+					vo.getRVo().setId(rs.getString(2));
+					vo.getRVo().setNo(rs.getInt(3));
+					vo.getRVo().setContent(rs.getString(4));
+					vo.getRVo().setStar(rs.getDouble(5));
+					vo.getRVo().setUp(rs.getInt(6));
+					vo.getRVo().setDown(rs.getInt(7));
+					vo.getRVo().setRegdate(rs.getDate(8));
+					rs.close();
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
