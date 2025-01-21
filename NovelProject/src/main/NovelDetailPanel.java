@@ -35,6 +35,12 @@ public class NovelDetailPanel extends JPanel implements ActionListener{
 	JScrollPane reviewPa, review;
 	JPanel rePanel1, rePanel2, rePanel3;
 	JButton b1, b2, b3;
+	JPanel rInfo;
+	JLabel regLa;
+	JButton[] bUp = new JButton[24];
+	JButton[] bDown = new JButton[24];
+	int[] noUp = new int[24];
+	int[] noDown = new int[24];
 	int mode = 0;
 	int dno = 0;
 	ControlPanel cp;
@@ -161,62 +167,115 @@ public class NovelDetailPanel extends JPanel implements ActionListener{
 		JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS)); // 세로 정렬
         contentPanel.setBackground(Color.WHITE);
-        
-        
-        for (ReviewVO vo : list) {
-            JPanel box = new JPanel();
-            box.setLayout(new BorderLayout());
-            box.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1)); // 박스 테두리
-            box.setBackground(Color.WHITE);
-
-            // 제목 라벨
-            JLabel titleLabel = new JLabel(vo.getNickname());
-            titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 14));
-            titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0)); // 여백
-
-            // 내용 라벨
-            JLabel contentLabel = new JLabel("<html><div style='width:240px;'>" + vo.getContent() + "</div></html>"); // 여러 줄 지원
-            contentLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-            contentLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0)); // 여백
-
-            // 레이아웃에 추가
-            box.add(titleLabel, BorderLayout.NORTH);
-            box.add(contentLabel, BorderLayout.CENTER);
-
-            // 크기 설정
-            box.setMaximumSize(new Dimension(300, Integer.MAX_VALUE)); // 고정 크기
-            contentPanel.add(box);
+		/*
+		
+		for (ReviewVO vo : list) {
+		    JPanel box = new JPanel();
+		    box.setLayout(new BorderLayout());
+		    box.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1)); // 박스 테두리
+		    box.setBackground(Color.WHITE);
+		
+		    // 제목 라벨
+		    JLabel rTitle = new JLabel(vo.getNickname());
+		    rTitle.setFont(new Font("맑은 고딕", Font.BOLD, 14));
+		    rTitle.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0)); // 여백
+		
+		    // 내용 라벨
+		    JLabel rContent = new JLabel("<html><div style='width:240px;'>" + vo.getContent() + "</div></html>"); // 여러 줄 지원
+		    rContent.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
+		    rContent.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0)); // 여백
+		
+		    regLa = new JLabel(vo.getRegdate().toString());
+		    String up = "공감" + vo.getUp();
+		    String down = "비공감" + vo.getDown();
+		    bup = new JButton(up);
+		    bdown = new JButton(down);
+		    
+		    
+		    //정보 라벨
+		    rInfo = new JPanel();
+		    rInfo.add(regLa);rInfo.add(bup);rInfo.add(bdown);
+		    
+		    bup.addActionListener(this);
+		    bdown.addActionListener(this);
+		    
+		    // 레이아웃에 추가
+		    box.add(rTitle, BorderLayout.NORTH);
+		    box.add(rContent, BorderLayout.CENTER);
+		    box.add(rInfo, BorderLayout.SOUTH);
+		
+		    // 크기 설정
+		    box.setMaximumSize(new Dimension(300, Integer.MAX_VALUE)); // 고정 크기
+		    contentPanel.add(box);
+		}*/
+        for (int i = 0; i < list.size(); i++) {
+        	JPanel box = new JPanel();
+        	box.setLayout(new BorderLayout());
+        	box.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1)); // 박스 테두리
+        	box.setBackground(Color.WHITE);
+        	
+        	// 제목 라벨
+        	JLabel rTitle = new JLabel(list.get(i).getNickname());
+        	rTitle.setFont(new Font("맑은 고딕", Font.BOLD, 14));
+        	rTitle.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0)); // 여백
+        	
+        	// 내용 라벨
+        	JLabel rContent = new JLabel("<html><div style='width:240px;'>" + list.get(i).getContent() + "</div></html>"); // 여러 줄 지원
+        	rContent.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
+        	rContent.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0)); // 여백
+        	regLa = new JLabel(list.get(i).getRegdate().toString());
+        	
+        	noUp[i] = list.get(i).getUp();
+        	noDown[i] = list.get(i).getDown();
+        	String up = "공감" + noUp[i];
+        	String down = "비공감" + noDown[i];
+        	
+        	bUp[i] = new JButton(up);
+        	bDown[i] = new JButton(down);
+        	
+        	
+        	//정보 라벨
+        	rInfo = new JPanel();
+        	rInfo.add(regLa);rInfo.add(bUp[i]);rInfo.add(bDown[i]);
+        	
+        	bUp[i].addActionListener(this);
+        	bDown[i].addActionListener(this);
+        	
+        	// 레이아웃에 추가
+        	box.add(rTitle, BorderLayout.NORTH);
+        	box.add(rContent, BorderLayout.CENTER);
+        	box.add(rInfo, BorderLayout.SOUTH);
+        	
+        	// 크기 설정
+        	box.setMaximumSize(new Dimension(300, Integer.MAX_VALUE)); // 고정 크기
+        	contentPanel.add(box);
         }
 
         reviewPa.setViewportView(contentPanel);
 	}
-	private static JPanel createBox(String title, String content) {
-        JPanel box = new JPanel();
-        box.setLayout(new BorderLayout());
-        box.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1)); // 박스 테두리
-        box.setBackground(Color.WHITE);
-
-        // 제목 라벨
-        JLabel titleLabel = new JLabel(title);
-        titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 14));
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); // 여백
-
-        // 내용 라벨
-        JLabel contentLabel = new JLabel("<html>" + content + "</html>"); // 여러 줄 지원
-        contentLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-        contentLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); // 여백
-
-        // 레이아웃에 추가
-        box.add(titleLabel, BorderLayout.NORTH);
-        box.add(contentLabel, BorderLayout.CENTER);
-
-        // 크기 설정
-        box.setPreferredSize(new Dimension(300, 60)); // 고정 크기
-
-        return box;
-    }
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		for(int i = 0; i < 24; i++) {
+			if(e.getSource() == bUp[i]) {
+				if(bUp[i].isEnabled()) { // 공감 / 비공감 선택 안한상태 => 공감
+					
+				}else { // 비공감 => 공감
+					
+				}
+				bUp[i].setEnabled(false);
+				bDown[i].setEnabled(true);
+				reviewPirnt(dno);
+			}else if(e.getSource() == bDown[i]) {
+				if(bDown[i].isEnabled()) { // 공감 / 비공감 선택 안한상태 => 비공감
+					
+				}else { // 공감 => 비공감
+					
+				}
+				bUp[i].setEnabled(true);
+				bDown[i].setEnabled(false);
+				reviewPirnt(dno);
+			}
+		}
 		// TODO Auto-generated method stub
 		if(e.getSource() == b3) {
 			cp.card.show(cp, link[mode]);
@@ -233,7 +292,6 @@ public class NovelDetailPanel extends JPanel implements ActionListener{
 			}else { // 추가 실패
 				JOptionPane.showMessageDialog(this, "즐겨찾기에서 삭제하지 못했습니다");
 			}
-			
 			followPrint(dno);
 		}
 	}
