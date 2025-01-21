@@ -94,7 +94,7 @@ implements ActionListener
 		// TODO Auto-generated method stub
 		if(e.getSource()==b3) {
 			
-			cp.card.show(cp, "BLIST"); // 목록으로 이동
+			cp.card.show(cp, "BOARD"); // 목록으로 이동
 			cp.bl.print(); // 데이터베이스에서 다시 읽기
 		}
 		
