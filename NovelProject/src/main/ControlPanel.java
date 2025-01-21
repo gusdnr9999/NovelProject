@@ -13,6 +13,10 @@ public class ControlPanel extends JPanel {
   NewsPanel nep;
   FollowPanel fp;
   BoardList bl;
+  BoardInsert bInsert;
+  BoardDetail bDetail;
+  BoardUpdate bUpdate;
+  BoardDelete bDelete;
   NovelDetailPanel ndp;
   CardLayout card = new CardLayout();
 
@@ -29,6 +33,14 @@ public class ControlPanel extends JPanel {
 	
 	bl = new BoardList(this);
 	add("BOARD", bl);
+	bInsert=new BoardInsert(this);
+	add("BINSERT" ,bInsert);
+	bDetail = new BoardDetail(this);
+	add("BDETAIL" ,bDetail);
+	bUpdate = new BoardUpdate(this);
+	add("BUPDATE" ,bUpdate);
+	bDelete=new BoardDelete(this);
+	add("BDELETE",bDelete);
 
 	nep = new NewsPanel(this);
 	add("NEWS", nep);

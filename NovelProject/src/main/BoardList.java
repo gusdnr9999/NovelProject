@@ -163,7 +163,7 @@ implements ActionListener,MouseListener
 				// 윈도우 / 웹 => 정수(X) , 문자열 => 문자열=>정수형으로 변경 
 				cp.card.show(cp,"BDETAIL");
 				// Database연동 
-				//cp.bDetail.print(1,Integer.parseInt(no));
+				cp.bDetail.print(1,Integer.parseInt(no));
 			}
 		}
 	}

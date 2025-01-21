@@ -76,10 +76,60 @@ implements ActionListener
     	 b4.addActionListener(this);
      }
      
+     public void print (int type,int n) {
+     	BoardDAO dao=BoardDAO.newInstance();
+     	BoardVO vo = dao.boardDetailData(type,n);
+     	
+     	name.setText(vo.getName());
+     	no.setText(String.valueOf(vo.getNo()));
+    	day.setText(vo.getDbday());
+     	hit.setText(String.valueOf(vo.getHit()));
+     	sub.setText(vo.getSubject());
+     	ta.setText(vo.getContent());
+     	
+     }
     
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		if(e.getSource()==b3) {
+			
+			cp.card.show(cp, "BLIST"); // 목록으로 이동
+			cp.bl.print(); // 데이터베이스에서 다시 읽기
+		}
 		
+		else if(e.getSource()==b1) {
+			
+			cp.bUpdate.pwdPf.setText("");
+			String strNo=no.getText();
+			BoardDAO dao = BoardDAO.newInstance();
+			BoardVO vo = dao.boardUpdateData(Integer.parseInt(strNo));
+			cp.card.show(cp, "BUPDATE");
+			cp.bUpdate.print(vo);
+			
+		}
+		
+		else if(e.getSource()==b2) {
+			String strNo=no.getText();
+			cp.bDelete.pf.setText("");
+			// 화면 이동 
+			cp.card.show(cp,"BDELETE");
+			// strNo 전송 
+			cp.bDelete.noLa.setText(strNo);
+			cp.bDelete.pf.requestFocus();
+		}
+		
+		else if(e.getSource()==b4) {
+			
+			String strNo = no.getText(); // 번호	
+			cp.bReply.nameTf.setText("");
+			cp.bReply.subTf.setText("");
+			cp.bReply.ta.setText("");
+			cp.bReply.pwdPf.setText("");
+			// 화면 이동
+			cp.card.show(cp, "BREPLY");
+			
+			cp.bReply.noLa.setText(strNo);
+		}
 	}
 }
