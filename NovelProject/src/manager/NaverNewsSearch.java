@@ -27,7 +27,7 @@ public class NaverNewsSearch {
         System.out.print("검색어 입력:");
         String fd=scan.next();
         
-        newsSearchData(fd);
+        newsSearchData(fd); 
     }
     
     public static List<NewsVO> newsSearchData(String fd)
