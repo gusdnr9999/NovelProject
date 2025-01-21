@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +29,7 @@ import dao.NovelDAO;
 import dao.ReviewDAO;
 import vo.NovelVO;
 import vo.ReviewVO;
-public class NovelDetailPanel extends JPanel implements ActionListener{
+public class NovelDetailPanel extends JPanel implements ActionListener,MouseListener{
 	JLabel poster;
 	JLabel titleLa, authorLa, ispaLa, genreLa, avgstarLa, serialLa, storyLa;
 	JLabel title, author, ispa, genre, avgstar, serial;
@@ -35,6 +37,8 @@ public class NovelDetailPanel extends JPanel implements ActionListener{
 	JScrollPane reviewPa, review;
 	JPanel rePanel1, rePanel2, rePanel3;
 	JButton b1, b2, b3;
+	JPanel myReview;
+	JLabel rStar, rContent, rInsert;
 	JPanel rInfo;
 	JLabel regLa;
 	JButton[] bUp = new JButton[24];
@@ -46,9 +50,11 @@ public class NovelDetailPanel extends JPanel implements ActionListener{
 	ControlPanel cp;
 	String[] link = {"","HOME","NOVEL","FIND","FOLLOW","MREVIEW"};
 	NovelDAO nDao = NovelDAO.newInstance();
+	NovelVO nVo = new NovelVO();
 	ReviewDAO rDao = ReviewDAO.newInstance();
 	FollowDAO fDao = FollowDAO.newInstance();
 	boolean followCheck = false;
+	private NovelVO vo;
 	public NovelDetailPanel(ControlPanel cp) {
 		this.cp = cp;
 		setLayout(null);
@@ -64,6 +70,13 @@ public class NovelDetailPanel extends JPanel implements ActionListener{
 		title.setBounds(415, 20, 250, 30);
 		add(titleLa); add(title);
 		
+		ispaLa = new JLabel("완결");
+		ispa = new JLabel();
+		
+		ispaLa.setBounds(670, 20, 80, 30);
+		ispa.setBounds(755, 20, 350, 30);
+		add(ispaLa); add(ispa);
+
 		authorLa = new JLabel("작가");
 		author = new JLabel();
 
@@ -71,45 +84,44 @@ public class NovelDetailPanel extends JPanel implements ActionListener{
 		author.setBounds(415, 55, 250, 30);
 		add(authorLa); add(author);
 		
-		ispaLa = new JLabel("완결");
-		ispa = new JLabel();
-		
-		ispaLa.setBounds(330, 90, 80, 30);
-		ispa.setBounds(415, 90, 350, 30);
-		add(ispaLa); add(ispa);
-		
-		genreLa = new JLabel("장르");
-		genre = new JLabel();
-		
-		genreLa.setBounds(330, 125, 80, 30);
-		genre.setBounds(415, 125, 250, 30);
-		add(genreLa); add(genre);
-		
 		avgstarLa = new JLabel("평균별점");
 		avgstar = new JLabel();
 		
-		avgstarLa.setBounds(330, 160, 80, 30);
-		avgstar.setBounds(415, 160, 250, 30);
+		avgstarLa.setBounds(670, 55, 80, 30);
+		avgstar.setBounds(755, 55, 250, 30);
+
+		genreLa = new JLabel("장르");
+		genre = new JLabel();
+		
+		genreLa.setBounds(330, 90, 80, 30);
+		genre.setBounds(415, 90, 250, 30);
+		add(genreLa); add(genre);
+		
 		add(avgstarLa); add(avgstar);
 		
 		serialLa = new JLabel("연재처");
 		serial = new JLabel();
 		
-		serialLa.setBounds(330, 195, 80, 30);
-		serial.setBounds(415, 195, 250, 30);
+		serialLa.setBounds(330, 125, 80, 30);
+		serial.setBounds(415, 125, 250, 30);
 		add(serialLa); add(serial);
 		
 		storyLa = new JLabel("줄거리");
 		storyTa = new JTextPane();
 		
-		storyLa.setBounds(330, 230, 80, 30);
-		storyTa.setBounds(415, 230, 250, 90);
+		storyLa.setBounds(330, 160, 80, 30);
+		storyTa.setBounds(415, 160, 250, 90);
 		add(storyLa); add(storyTa);
 		storyTa.setEnabled(false);
-		
+
+		myReview = new JPanel();
+		myReview.setLayout(new BorderLayout());
+		myReview.setBounds(330, 255, 350, 90);
+		myReview.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1)); // 테두리 추가
+		myReview.setBackground(Color.WHITE);
 		
 		reviewPa = new JScrollPane();
-		reviewPa.setBounds(330, 325, 335, 195);
+		reviewPa.setBounds(330, 350, 350, 170);
 		reviewPa.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1)); // 테두리 추가
 		reviewPa.setBackground(Color.WHITE);
 		
@@ -135,6 +147,7 @@ public class NovelDetailPanel extends JPanel implements ActionListener{
 	public void detailPrint(int mode, NovelVO vo){
 		this.mode = mode;
 		this.dno = vo.getNo();
+		this.nVo = vo;
 		reviewPirnt(dno);
 		followPrint(vo.getNo());
 		try {
@@ -150,6 +163,29 @@ public class NovelDetailPanel extends JPanel implements ActionListener{
 			storyTa.setText(vo.getStory());
 			
 		} catch (Exception e) {}
+		myReview.removeAll();
+		
+		if(vo.getRVo().getRno() != 0) {
+			String star = "";
+			int star1 = (int)(vo.getRVo().getStar()/1);
+			double star2 = vo.getRVo().getStar() - star1;
+			for(int i = 1; i <= star1; i++) {
+				star+="★";
+			}
+			if(star2 == 0.5) {
+				star+="☆";
+			}
+			rStar = new JLabel("별점 : " + star);
+			rContent = new JLabel("<html><div style='width:240px;'>" + vo.getRVo().getContent() + "</div></html>");
+			myReview.add(rStar, BorderLayout.NORTH);
+			myReview.add(rContent, BorderLayout.CENTER);
+			add(myReview);
+		}else {
+			rInsert = new JLabel("<html>등록된 리뷰가 없습니다<br>리뷰를 등록하시겠습니까?</html>");
+			myReview.add(rInsert, BorderLayout.CENTER);
+			add(myReview);
+			rInsert.addMouseListener(this);
+		}
 	}
 	public void followPrint(int no) {
 		followCheck = fDao.FollowCheck(no);
@@ -294,5 +330,29 @@ public class NovelDetailPanel extends JPanel implements ActionListener{
 			}
 			followPrint(dno);
 		}
+	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+	}
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
