@@ -77,7 +77,7 @@ implements ActionListener,MouseListener
     	table.getTableHeader().setReorderingAllowed(false);
     	table.setShowVerticalLines(false);
     	table.setRowHeight(30);
-    	table.getTableHeader().setBackground(Color.pink);
+    	table.getTableHeader().setBackground(Color.gray);
     	
     	// 배치 
     	setLayout(null);
@@ -190,6 +190,31 @@ implements ActionListener,MouseListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+		if(e.getSource()==inBtn)// 새글
+   		{
+   			// 초기화 
+   			cp.bInsert.nameTf.setText("");
+   			cp.bInsert.subTf.setText("");
+   			cp.bInsert.ta.setText("");
+   			cp.bInsert.pwdPf.setText("");
+   			cp.card.show(cp, "BINSERT");
+   			cp.bInsert.nameTf.requestFocus();
+   		}
+   		else if(e.getSource()==prevBtn)//이전
+   		{
+   			if(curpage>1)
+   			{
+   				curpage--;
+   				print();
+   			}
+   		}
+   		else if(e.getSource()==nextBtn)// 다음 
+   		{
+   			if(curpage<totalpage)
+   			{
+   				curpage++;
+   				print();
+   			}
+   		}
 	}
 }

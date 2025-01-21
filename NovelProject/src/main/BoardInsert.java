@@ -68,7 +68,7 @@ implements ActionListener
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource()==b2) {
-			cp.card.show(cp, "BLIST"); // 목록으로 이동
+			cp.card.show(cp, "BOARD"); // 목록으로 이동
 			// => response.sendRedirect("list.jsp");
 		}
 		else if(e.getSource()==b1) {
