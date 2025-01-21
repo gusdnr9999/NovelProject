@@ -14,6 +14,7 @@ public class ControlPanel extends JPanel {
   FollowPanel fp;
   BoardList bl;
   NovelDetailPanel ndp;
+
   CardLayout card = new CardLayout();
 
   public ControlPanel() {
