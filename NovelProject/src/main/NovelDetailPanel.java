@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 
 import common.ImageChange;
@@ -38,6 +39,8 @@ public class NovelDetailPanel extends JPanel implements ActionListener,MouseList
 	JPanel rePanel1, rePanel2, rePanel3;
 	JButton b1, b2, b3;
 	JPanel myReview;
+	JTextArea inContent;
+	JButton rb;
 	JLabel rStar, rContent, rInsert;
 	JPanel rInfo;
 	JLabel regLa;
@@ -181,10 +184,12 @@ public class NovelDetailPanel extends JPanel implements ActionListener,MouseList
 			myReview.add(rContent, BorderLayout.CENTER);
 			add(myReview);
 		}else {
-			rInsert = new JLabel("<html>등록된 리뷰가 없습니다<br>리뷰를 등록하시겠습니까?</html>");
-			myReview.add(rInsert, BorderLayout.CENTER);
+			inContent = new JTextArea("등록된 리뷰가 없습니다\n리뷰를 등록하시겠습니까?");
+			rb = new JButton("리뷰 등록");
+			myReview.add(inContent, BorderLayout.CENTER);
+			myReview.add(rb, BorderLayout.SOUTH);
 			add(myReview);
-			rInsert.addMouseListener(this);
+			rb.addActionListener(this);
 		}
 	}
 	public void followPrint(int no) {
@@ -329,6 +334,8 @@ public class NovelDetailPanel extends JPanel implements ActionListener,MouseList
 				JOptionPane.showMessageDialog(this, "즐겨찾기에서 삭제하지 못했습니다");
 			}
 			followPrint(dno);
+		}else if(e.getSource() == rb) { // 리뷰 등록
+			myReview.removeAll();
 		}
 	}
 	@Override

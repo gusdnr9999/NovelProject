@@ -8,7 +8,7 @@
 	<classpathentry kind="src" path="NovelProject/src"/>
 	<classpathentry kind="lib" path="C:/javaDev/lombok-1.18.36.jar"/>
 	<classpathentry kind="lib" path="C:/oracleDev/ojdbc8.jar"/>
-	<classpathentry kind="lib" path="C:/javaDev/JTattoo-1.6.13.jar"/>
-	<classpathentry kind="lib" path="C:/javaDev/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/user/Downloads/JTattoo-1.6.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/user/Downloads/json-simple-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
